@@ -176,6 +176,7 @@ int main() {
   long cap = 1;
   for (auto monkey : monkeys)
     cap *= monkey.testVal;
+  cout << "Cap " << cap;
 
   for (int i = 1; i <= 10000; i++) {
     runRound(monkeys2, false, cap);
