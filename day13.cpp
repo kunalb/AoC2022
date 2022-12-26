@@ -35,25 +35,28 @@ ostream &operator<<(ostream &os, const NestedList &nl) {
 
 NestedList readList(const string &s) {
   deque<NestedList> state;
+  bool justOpened = false;
 
   for (auto ch : s) {
     if (ch == '[') {
       NestedList l = make_unique<S>();
       state.push_back(move(l));
     } else if (ch == ']' || ch == ',') {
-      cout << "At " << ch << endl;
-      for (auto &nl : state) {
-        cout << "  " << nl << endl;
-      }
+      // cout << "At " << ch << endl;
+      // for (auto &nl : state) {
+      //   cout << "  " << nl << endl;
+      // }
+      if (ch == ']' && justOpened)
+        continue;
 
       auto res = move(state.back());
       state.pop_back();
       get<1>(state.back())->lst.push_back(move(res));
 
-      cout << "After " << ch << endl;
-      for (auto &nl : state) {
-        cout << "  " << nl << endl;
-      }
+      // cout << "After " << ch << endl;
+      // for (auto &nl : state) {
+      //   cout << "  " << nl << endl;
+      // }
     } else if (ch >= '0' && ch <= '9') {
       if (int *val = get_if<int>(&state.back())) {
         *val = (*val) * 10 + (ch - '0');
@@ -63,6 +66,8 @@ NestedList readList(const string &s) {
     } else {
       throw invalid_argument("Can't handle: `" + std::string(1, ch) + "`");
     }
+
+    justOpened = ch == '[';
   }
 
   return move(state.back());
@@ -74,22 +79,22 @@ list<NestedList> readLists() {
   string line;
   while (!cin.eof()) {
     getline(cin, line);
+    cout << line << endl;
     result.push_back(readList(line));
 
     getline(cin, line);
+    cout << line << endl;
     result.push_back(readList(line));
 
     getline(cin, line);
+    cout << line << endl;
   }
 
   return result;
 }
 
 int main() {
-  // auto lists = readLists();
-
-  // getline(cin, line);
-  string line = "[10,[0],1]";
-  cout << line << endl;
-  cout << readList(line) << endl;
+  // auto input = "[]";
+  // cout << readList(input) << endl;
+  auto lists = readLists();
 }
