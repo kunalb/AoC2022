@@ -1,5 +1,5 @@
-#include <iostream>
 #include <deque>
+#include <iostream>
 #include <list>
 #include <memory>
 #include <stdexcept>
@@ -41,30 +41,14 @@ NestedList readList(const string &s) {
       NestedList l = make_unique<S>();
       state.push_back(move(l));
     } else if (ch == ']' || ch == ',') {
-
       cout << "At " << ch << endl;
       for (auto &nl : state) {
         cout << "  " << nl << endl;
       }
 
-      int popCount = 2;
-      if (ch == ',') {
-        popCount = 1;
-      } else if (auto s = get_if<1>(&state.back())) {
-        if ((*s)->lst.empty())
-          popCount = 1;
-      }
-
-      for (int i = 0; i < popCount; i++) {
-        auto res = move(state.back());
-        state.pop_back();
-
-        if (state.empty()) {
-          return res;
-        } else {
-          get<1>(state.back())->lst.push_back(move(res));
-        }
-      }
+      auto res = move(state.back());
+      state.pop_back();
+      get<1>(state.back())->lst.push_back(move(res));
 
       cout << "After " << ch << endl;
       for (auto &nl : state) {
@@ -81,7 +65,7 @@ NestedList readList(const string &s) {
     }
   }
 
-  throw invalid_argument("Unexpected location! " + s);
+  return move(state.back());
 }
 
 list<NestedList> readLists() {
@@ -104,7 +88,7 @@ list<NestedList> readLists() {
 int main() {
   // auto lists = readLists();
 
-  //getline(cin, line);
+  // getline(cin, line);
   string line = "[10,[0],1]";
   cout << line << endl;
   cout << readList(line) << endl;
