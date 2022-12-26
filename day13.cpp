@@ -79,15 +79,12 @@ list<NestedList> readLists() {
   string line;
   while (!cin.eof()) {
     getline(cin, line);
-    cout << line << endl;
     result.push_back(readList(line));
 
     getline(cin, line);
-    cout << line << endl;
     result.push_back(readList(line));
 
     getline(cin, line);
-    cout << line << endl;
   }
 
   return result;
